@@ -14,11 +14,25 @@ public class averagePerHour {
 
             cleanFile.validateAndCleanCSV(inputFilePath, cleanFileOutput);
             String resultAvgFile = "output.csv";
-            try {
-                processCSV(cleanFileOutput, resultAvgFile);
-            } catch (IOException e) {
-                System.err.println("Error processing file: " + e.getMessage());
-            }
+            //way 1
+//            try {
+//                processCSV(cleanFileOutput, resultAvgFile);
+//            } catch (IOException e) {
+//                System.err.println("Error processing file: " + e.getMessage());
+//            }
+
+            // way 2 (best way)
+                String outputDirectory = "output_parts";
+                String finalOutputFile = "final_output.csv";
+
+                try {
+                   splitFileData.splitAndProcessCSV(cleanFileOutput, outputDirectory);
+                   splitFileData.mergeProcessedFiles(outputDirectory, finalOutputFile);
+                    System.out.println("Processing complete. Final output saved to " + finalOutputFile);
+                } catch (IOException e) {
+                    System.err.println("Error processing file: " + e.getMessage());
+                }
+
             scanner.close();
         }
     public static void processCSV(String inputFile, String outputFile) throws IOException {
