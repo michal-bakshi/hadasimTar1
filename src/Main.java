@@ -5,6 +5,35 @@ import java.util.regex.*;
 
 public class Main {
     private static final int MAX_LINES_PER_PART = 100000;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Please enter the file name or full file path: ");
+        String fileName = scanner.nextLine();
+        System.out.print("How many of the most common errors would you like to see? ");
+        int n=scanner.nextInt();
+
+        int totalLines=countLines(fileName);
+        int numberOfParts = decideNumberOfParts(totalLines);
+        splitLogFile(fileName);
+
+        List<String> partFiles = new ArrayList<>();
+        for (int i = 1; i <= numberOfParts; i++) {
+            partFiles.add("split/log_part_" + i + ".txt");
+        }
+
+        Map<Integer, Integer> mergedCounts = mergeErrorCounts(partFiles);
+
+        List<Map.Entry<Integer, Integer>> topErrors = getTopErrors(mergedCounts, n);
+
+        System.out.println("Top "+n+" error codes:");
+        for (Map.Entry<Integer, Integer> entry : topErrors) {
+            System.out.println("Error Code: " + entry.getKey() + " - Count: " + entry.getValue());
+        }
+        scanner.close();
+        //O(n log k)
+    }
+
     //O(n)
     public static int countLines(String fileName) {
         int lines = 0;
@@ -91,31 +120,5 @@ public class Main {
         return sortedErrors.subList(0, Math.min(N, sortedErrors.size()));
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Please enter the file name or full file path: ");
-        String fileName = scanner.nextLine();
-        System.out.print("How many of the most common errors would you like to see? ");
-        int n=scanner.nextInt();
 
-        int totalLines=countLines(fileName);
-        int numberOfParts = decideNumberOfParts(totalLines);
-        splitLogFile(fileName);
-
-        List<String> partFiles = new ArrayList<>();
-        for (int i = 1; i <= numberOfParts; i++) {
-            partFiles.add("split/log_part_" + i + ".txt");
-        }
-
-        Map<Integer, Integer> mergedCounts = mergeErrorCounts(partFiles);
-
-        List<Map.Entry<Integer, Integer>> topErrors = getTopErrors(mergedCounts, n);
-
-        System.out.println("Top "+n+" error codes:");
-        for (Map.Entry<Integer, Integer> entry : topErrors) {
-            System.out.println("Error Code: " + entry.getKey() + " - Count: " + entry.getValue());
-        }
-       scanner.close();
-        //O(n log k)
-    }
 }
