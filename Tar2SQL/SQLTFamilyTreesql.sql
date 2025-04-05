@@ -48,7 +48,7 @@ SELECT Person_Id, Spouse_Ids,
 FROM Persons
 WHERE Spouse_Ids IS NOT NULL;
 
-
+----השלמת בני זוג חסרים לפני הצד השני
 UPDATE P2
 SET P2.Spouse_Ids = P1.Person_Id
 FROM Persons P1
